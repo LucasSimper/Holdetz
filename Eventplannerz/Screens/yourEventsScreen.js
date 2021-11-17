@@ -1,13 +1,12 @@
 import {Button, StyleSheet, Text, View} from "react-native";
 import * as React from "react";
 
-
-function homeScreen({navigation}) {
+function yourEventsScreen({navigation}) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Button title="Your Events" onPress={() => navigation.navigate('Your Events')}  />
+        <Button title="Create Event" onPress={() => navigation.navigate('Create Event')}  />
       </View>
     );
   }
 
-  export default homeScreen;
+  export default yourEventsScreen;
