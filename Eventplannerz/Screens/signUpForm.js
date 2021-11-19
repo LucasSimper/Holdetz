@@ -5,7 +5,7 @@ import {Button,Text,
     ActivityIndicator,
     StyleSheet,
 } from 'react-native';
-import firebase from 'firebase';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 
 function signUpForm() {
@@ -18,10 +18,15 @@ function signUpForm() {
         return <Button onPress={() => handleSubmit()} title="Create user" />;
     };
 
+    const auth = getAuth();
+
     const handleSubmit = async() => {
         try {
-           await firebase.auth().createUserWithEmailAndPassword(email, password).then((data)=>{
-           });
+           await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            // ...
+          })
         } catch (error){
            setErrorMessage(error.message)
         }

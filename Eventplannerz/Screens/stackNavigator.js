@@ -3,6 +3,7 @@ import homeScreen from "./homeScreen";
 import yourEventsScreen from "./yourEventsScreen";
 import createEventScreen from "./createEventScreen";
 import { createStackNavigator } from '@react-navigation/stack';
+import { Button } from "react-native-paper";
 
 
 const Stack = createStackNavigator()
@@ -16,7 +17,16 @@ function StackNavigator() {
             options={{
                 headerTitleAlign: 'center',
                 headerTitleStyle: {color: 'white'},
-                headerStyle: {backgroundColor: '#ba6262'}}
+                headerStyle: {backgroundColor: '#ba6262'},
+                headerRight: () => (
+                    <Button onPress={() => alert('This is a button')}
+                        title="Info" 
+                        background-color="blue"
+                        />
+                        
+                    )
+            
+            }
                 }
             />
         

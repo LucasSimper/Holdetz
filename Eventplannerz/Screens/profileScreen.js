@@ -1,19 +1,26 @@
 import React from 'react';
 import {View, Text, Button, StyleSheet} from 'react-native';
-import firebase from 'firebase';
+import { getAuth, signOut } from "firebase/auth";
+
+
 
 function profileScreen() {
+    const auth = getAuth();
     const handleLogOut = async () => {
-        await firebase.auth().signOut();
+        await signOut(auth).then(() => {
+          // Sign-out successful.
+        }).catch((error) => {
+          // An error happened.
+        });
     };
 
-    if (!firebase.auth().currentUser) {
+    if (!getAuth().currentUser) {
         return <View><Text>Not found</Text></View>;
     }
 
     return (
         <View style={styles.container} >
-            <Text>Current user: {firebase.auth().currentUser.email}</Text>
+            <Text>Current user: {getAuth().currentUser.email}</Text>
             <Button onPress={() => handleLogOut()} title="Log out" />
         </View>
     );

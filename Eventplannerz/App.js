@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import firebase from "firebase";
+import firebase from 'firebase/compat/app';
+import { initializeApp } from 'firebase/app';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './Screens/homeScreen';
@@ -11,6 +12,7 @@ import stackNavigator from './Screens/stackNavigator';
 import SignUpForm from './Screens/signUpForm';
 import LoginForm from "./Screens/loginForm";
 import { Card } from 'react-native-paper';
+import { getAuth } from "firebase/auth";
 
 const Tab = createBottomTabNavigator();
 
@@ -28,13 +30,13 @@ const Tab = createBottomTabNavigator();
 export default function App() {
   
   if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+    initializeApp(firebaseConfig);
   }
 
   const [user, setUser] = useState({ loggedIn: false });
 
   function onAuthStateChange(callback) {
-    return firebase.auth().onAuthStateChanged(user => {
+    return getAuth().onAuthStateChanged(user => {
       if (user) {
         callback({loggedIn: true, user: user});
       } else {
@@ -69,25 +71,25 @@ export default function App() {
     )
   }
 
-
 if(user.loggedIn == true) {
   return (
     <NavigationContainer>
-    <Tab.Navigator>
-      <Tab.Screen options={{headerShown: false}} name="StackNavigator" component={stackNavigator} />
-      <Tab.Screen name="Profile" component={profileScreen} />
-    </Tab.Navigator>
-  
-  </NavigationContainer>
+      <Tab.Navigator>
+        <Tab.Screen options={{headerShown: false}} name="Home" component={stackNavigator} />
+        <Tab.Screen name="Profile" component={profileScreen} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
-} 
-  else {
-    return (
-      <GuestPage/>
-  )
+  } 
+    else {
+      return (
+        <GuestPage/>
+     )
 }
 
 }
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

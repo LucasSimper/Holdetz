@@ -7,7 +7,8 @@ import {
     ActivityIndicator,
     StyleSheet,
 } from 'react-native';
-import firebase from 'firebase';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 
 function loginForm() {
 
@@ -16,13 +17,16 @@ function loginForm() {
     const [isCompleted, setCompleted] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
 
-   
+    const auth = getAuth();
+    
     const handleSubmit = async () => {
         try {
-            await firebase.auth().signInWithEmailAndPassword(email, password).then((data)=>{
-            });
-
-        } catch (error){
+            await signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+                // Signed in 
+                const user = userCredential.user;
+                // ...
+              })
+            } catch (error){
             setErrorMessage(error.message)
         }
     }

@@ -7,8 +7,7 @@ function createEventScreen() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Card style={{padding:20}}>
-            
-            
+            <CreateEventForm/>
           </Card>   
       </View>
     );

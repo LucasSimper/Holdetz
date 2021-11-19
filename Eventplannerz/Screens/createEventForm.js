@@ -5,7 +5,7 @@ import {Button,Text,
     ActivityIndicator,
     StyleSheet,
 } from 'react-native';
-import firebase from 'firebase';
+import firebase from 'firebase/compat/app';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { getDatabase, ref, set } from "firebase/database";
@@ -25,8 +25,10 @@ function createEvent() {
 
     const handleSubmit = async() => {
         try {
+            const auth = getAuth();
+            const user = auth.currentUser;
             const db = getDatabase();
-            set(ref(db, 'events/' + userId), {
+            set(ref(db, 'events/' + user.uid), {
               Description: description,
               Time: time,
               Date: date,
@@ -50,21 +52,18 @@ return(
                 placeholder="time"
                 value={time}
                 onChangeText={(time) => setTime(time)}
-                secureTextEntry
                 style={styles.inputField}
             />
             <TextInput
                 placeholder="date"
                 value={date}
                 onChangeText={(date) => setDate(date)}
-                secureTextEntry
                 style={styles.inputField}
             />
             <TextInput
                 placeholder="location"
                 value={location}
                 onChangeText={(location) => setLocation(location)}
-                secureTextEntry
                 style={styles.inputField}
             />
             {errorMessage && (
@@ -75,6 +74,19 @@ return(
 )
 }
 
+const styles = StyleSheet.create({
+    error: {
+        color: 'red',
+    },
+    inputField: {
+        borderWidth: 1,
+        margin: 10,
+        padding: 10,
+    },
+    header: {
+        fontSize: 40,
+    },
+});
 
 
 export default createEvent;
