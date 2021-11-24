@@ -75,7 +75,7 @@ if(user.loggedIn == true) {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        <Tab.Screen options={{headerShown: false}} name="Home" component={stackNavigator} />
+        <Tab.Screen options={{headerShown: false}} name="Home " component={stackNavigator} />
         <Tab.Screen name="Profile" component={profileScreen} />
       </Tab.Navigator>
     </NavigationContainer>
