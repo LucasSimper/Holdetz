@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import firebase from 'firebase/compat/app';
 import { initializeApp } from 'firebase/app';
 import { NavigationContainer } from '@react-navigation/native';
@@ -76,7 +76,16 @@ if(user.loggedIn == true) {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen options={{headerShown: false}} name="Home " component={stackNavigator} />
-        <Tab.Screen name="Profile" component={profileScreen} />
+        <Tab.Screen name="Profile" component={profileScreen} 
+          options={{headerRight: () => (
+            <Button
+                onPress={() => alert('This is a button!')}
+                title="Info"
+                color="#00cc00"
+                />
+          ),
+          }}
+              />
       </Tab.Navigator>
     </NavigationContainer>
   );
