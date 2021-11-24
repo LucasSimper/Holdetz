@@ -3,9 +3,18 @@ import * as React from "react";
 
 
 function homeScreen({navigation}) {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => navigation.navigate("Your Events")}
+                title="Your Events" />
+      ),
+    });
+  }, [navigation]);
+
     return (
       <View style={{ flex: 1, alignItems: 'center' }}>
-        <Button title="Your Events" onPress={() => navigation.navigate('Your Events')}  />
       </View>
     );
   }

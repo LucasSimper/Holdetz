@@ -3,9 +3,11 @@ import homeScreen from "./homeScreen";
 import yourEventsScreen from "./yourEventsScreen";
 import createEventScreen from "./createEventScreen";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Button } from "react-native-paper";
+import { View, Text, Button, Image } from 'react-native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function StackNavigator() {
   return (
@@ -13,25 +15,21 @@ function StackNavigator() {
       <Stack.Screen
         name="Home"
         component={homeScreen}
-        options={{
-          headerTitle: "Home",
-          headerRight: () => (
-            <Button
-              onPress={() => alert("This is a button")}
-              title="Info"
-              background-color="#00cc00"
-            />
-          ),
-        }}
+        options={({ navigation, route }) => ({
+          headerTitleStyle: { textAlign: "right", color: "white" },
+          headerStyle: { backgroundColor: "#62bab5" }
+
+        })}
       />
 
       <Stack.Screen
         name="Your Events"
         component={yourEventsScreen}
-        options={{
+        options={({ navigation, route }) => ({
           headerTitleStyle: { textAlign: "right", color: "white" },
-          headerStyle: { backgroundColor: "#62bab5" },
-        }}
+          headerStyle: { backgroundColor: "#62bab5" }
+
+        })}
       />
 
       <Stack.Screen

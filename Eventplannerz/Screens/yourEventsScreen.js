@@ -8,30 +8,37 @@ import {
   StatusBar,
 } from "react-native";
 import * as React from "react";
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getDatabase, ref, query, child, get, orderByChild, equalTo, onValue } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 
 const yourEventsScreen = ({ navigation }) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button onPress={() => navigation.navigate("Create Event")}
+                title="Create Event" />
+      ),
+    });
+  }, [navigation]);
+
   const auth = getAuth();
   const user = auth.currentUser;
   const [events, setEvents] = useState({});
-  const dbRef = ref(getDatabase());
+  const db = getDatabase();
 
-  useEffect(() => {
-    get(child(dbRef, `events/` + user.uid))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          console.log(snapshot.val());
-          setEvents(snapshot.val());
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+useEffect(() => {
+  const yourEventQuery = query(ref(db, 'events'), orderByChild('UserID'), equalTo(user.uid))
+  onValue(yourEventQuery, (snapshot) => {
+    if (snapshot.exists) {
+      console.log(snapshot.val());
+      setEvents(snapshot.val());
+    } else {
+      console.log("No data Available")
+    }
+})
+}, []);
 
   const eventsArr = Object.keys(events).map((key) => {
     events[key].id = key;
@@ -54,12 +61,6 @@ const yourEventsScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id}
       />
 
-      <Button
-        title="Create Event"
-        onPress={() => navigation.navigate("Create Event")}
-      />
-
-      <Button title="See events" onPress={() => console.log(eventsArr)} />
     </SafeAreaView>
   );
 };

@@ -29,13 +29,14 @@ function createEvent() {
       const auth = getAuth();
       const user = auth.currentUser;
       const db = getDatabase();
-      const postListRef = ref(db, "events/" + user.uid);
+      const postListRef = ref(db, "events/");
       const newPostRef = push(postListRef);
       set(newPostRef, {
         Description: description,
         Time: time,
         Date: date,
         Location: location,
+        UserID: user.uid
       });
     } catch (error) {
       setErrorMessage(error.message);
