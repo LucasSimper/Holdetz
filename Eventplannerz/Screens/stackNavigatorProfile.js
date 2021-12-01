@@ -4,15 +4,17 @@ import yourEventsScreen from "./yourEventsScreen";
 import createEventScreen from "./createEventScreen";
 import { View, Text, Button, Image } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import profileScreen from "./profileScreen";
+import editProfileScreen from "./EditProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
-function StackNavigator() {
+function StackNavigatorProfile() {
   return (
-    <Stack.Navigator initialRouteName="Home">
+    <Stack.Navigator initialRouteName="Profile">
       <Stack.Screen
-        name="Home"
-        component={homeScreen}
+        name="Profile"
+        component={profileScreen}
         options={({ navigation, route }) => ({
           headerTitleStyle: { textAlign: "right", color: "white" },
           headerStyle: { backgroundColor: "#62bab5" }
@@ -21,18 +23,8 @@ function StackNavigator() {
       />
 
       <Stack.Screen
-        name="Your Events"
-        component={yourEventsScreen}
-        options={({ navigation, route }) => ({
-          headerTitleStyle: { textAlign: "right", color: "white" },
-          headerStyle: { backgroundColor: "#62bab5" }
-
-        })}
-      />
-
-      <Stack.Screen
-        name="Create Event"
-        component={createEventScreen}
+        name="Edit Profile"
+        component={editProfileScreen}
         options={({ navigation, route }) => ({
           headerTitleStyle: { textAlign: "right", color: "white" },
           headerStyle: { backgroundColor: "#62bab5" }
@@ -43,4 +35,4 @@ function StackNavigator() {
   );
 }
 
-export default StackNavigator;
+export default StackNavigatorProfile;

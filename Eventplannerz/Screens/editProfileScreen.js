@@ -7,12 +7,12 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from "react-native";
-import firebase from "firebase/compat/app";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 import { getDatabase, ref, push, set } from "firebase/database";
 
-function createEvent() {
+function editProfile({ navigation }) {
+
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
@@ -38,13 +38,14 @@ function createEvent() {
         Location: location,
         UserID: user.uid
       });
+      navigation.navigate("Your Events")
     } catch (error) {
       setErrorMessage(error.message);
     }
   };
   return (
     <View>
-      <Text style={styles.header}>Description</Text>
+      <Text style={styles.header}>New Event</Text>
       <TextInput
         placeholder="description"
         value={description}
@@ -89,4 +90,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default createEvent;
+export default editProfile;
