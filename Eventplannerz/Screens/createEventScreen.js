@@ -1,4 +1,136 @@
-import React, { useState } from "react";
+import * as React from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    TextInput,
+    Button,
+    Alert,
+    ScrollView,
+    SafeAreaView,
+} from 'react-native';
+import firebase from 'firebase';
+import {useEffect, useState} from "react";
+
+const createEventScreen = ({navigation,route}) => {
+
+    const initialState = {
+        name: '',
+        place: '',
+        time: '',
+        date: ''
+    }
+
+    const [newEvent,setNewEvent] = useState(initialState);
+
+    /*Returnere true, hvis vi er på edit event*/
+    const isEditEvent = route.name === "Edit Event";
+
+    useEffect(() => {
+        if(isEditEvent){
+            const event = route.params.event[1];
+            setNewCar(event)
+        }
+        /*Fjern data, når vi går væk fra screenen*/
+        return () => {
+            setNewEvent(initialState)
+        };
+    }, []);
+
+    const changeTextInput = (name,event) => {
+        setNewCar({...newCar, [name]: event});
+    }
+
+    const handleSave = () => {
+
+        const { name, place, time, date } = newEvent;
+
+        if(name.length === 0 || place.length === 0 || time.length === 0 || date.length === 0 ){
+            return Alert.alert('Et af felterne er tomme!');
+        }
+
+        if(isEditEvent){
+            const id = route.params.event[0];
+            try {
+                firebase
+                    .database()
+                    .ref(`/events/${id}`)
+                    // Vi bruger update, så kun de felter vi angiver, bliver ændret
+                    .update({ name, place, time, date });
+                // Når bilen er ændret, går vi tilbage.
+                Alert.alert("Din info er nu opdateret");
+                const event = [id,newEvent]
+                navigation.navigate("Event Details",{event});
+            } catch (error) {
+                console.log(`Error: ${error.message}`);
+            }
+
+        }else{
+
+            try {
+                firebase
+                    .database()
+                    .ref('/event/')
+                    .push({ name, place, time, date });
+                Alert.alert(`Saved`);
+                setNewEvent(initialState)
+            } catch (error) {
+                console.log(`Error: ${error.message}`);
+            }
+        }
+
+    };
+
+    return (
+        <SafeAreaView style={styles.container}>
+            <ScrollView>
+                {
+                    Object.keys(initialState).map((key,index) =>{
+                        return(
+                            <View style={styles.row} key={index}>
+                                <Text style={styles.label}>{key}</Text>
+                                <TextInput
+                                    value={newEvent[key]}
+                                    onChangeText={(event) => changeTextInput(key,event)} //event her refererer ikke til vores event/begivenhed
+                                    style={styles.input}
+                                />
+                            </View>
+                        )
+                    })
+                }
+                {/*Hvis vi er inde på edit event, vis save changes i stedet for add event*/}
+                <Button title={ isEditEvent ? "Save changes" : "Add event"} onPress={() => handleSave()} />
+            </ScrollView>
+        </SafeAreaView>
+    );
+}
+
+export default createEventScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center'
+    },
+    row: {
+        flexDirection: 'row',
+        height: 30,
+        margin: 10,
+    },
+    label: {
+        fontWeight: 'bold',
+        width: 100
+    },
+    input: {
+        borderWidth: 1,
+        padding:5,
+        flex: 1
+    },
+});
+
+
+/*
+import React, {useEffect, useState } from "react";
 import {
   Button,
   Text,
@@ -6,7 +138,10 @@ import {
   TextInput,
   ActivityIndicator,
   StyleSheet,
-  Switch
+  Switch,
+  Alert,
+  ScrollView,
+  SafeAreaView
 } from "react-native";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -117,3 +252,4 @@ const styles = StyleSheet.create({
 });
 
 export default createEvent;
+*/
