@@ -11,6 +11,8 @@ import LoginForm from "./Screens/loginForm";
 import { Card } from "react-native-paper";
 import { getAuth } from "firebase/auth";
 import stackNavigatorProfile from "./Screens/stackNavigatorProfile";
+import { StatusBar } from 'expo-status-bar';
+import {createStackNavigator} from "@react-navigation/stack";
 
 const Tab = createBottomTabNavigator();
 

@@ -1,3 +1,86 @@
+
+import * as React from 'react';
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import firebase from 'firebase';
+import {useEffect, useState} from "react";
+import {
+  getDatabase,
+  ref,
+  query,
+  child,
+  get,
+  orderByChild,
+  equalTo,
+  onValue,
+} from "firebase/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+const yourEventsScreen = ({navigation}) => {
+
+    const [events,setEvents] = useState()
+
+    useEffect(() => {
+        if(!events) {
+            firebase
+                .database()
+                .ref('/events/')
+                .on('value', snapshot => {
+                        setEvents(snapshot.val())
+                });
+        }
+    },[]);
+
+    // Vi viser ingenting hvis der ikke er data
+    if (!events) {
+        return <Text>Loading...</Text>;
+    }
+
+   const handleSelectEvent = id => {
+        /*Her søger vi direkte i vores array af events og finder event objektet som matcher idet vi har tilsendt*/
+        const event = Object.entries(events).find( event => event[0] === id /*id*/)
+        navigation.navigate('Event Details', { event });
+    };
+
+    // Flatlist forventer et array. Derfor tager vi alle values fra vores cars objekt, og bruger som array til listen
+    const eventArray = Object.values(events);
+    const eventKeys = Object.keys(events);
+
+    return (
+        <FlatList
+            data={eventArray}
+            // Vi bruger carKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
+            keyExtractor={(item, index) => eventKeys[index]}
+            renderItem={({ item, index }) => {
+                return(
+                    <TouchableOpacity style={styles.container} onPress={() => handleSelectCar(eventKeys[index])}>
+                        <Text>
+                            {item.name} {item.place}
+                        </Text>
+                    </TouchableOpacity>
+                )
+            }}
+        />
+    );
+}
+
+export default yourEventsScreen;
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        borderWidth: 1,
+        borderRadius:10,
+        margin: 5,
+        padding: 5,
+        height: 50,
+        justifyContent:'center'
+    },
+    label: { fontWeight: 'bold' },
+});
+
+
+/*
 import {
   SafeAreaView,
   FlatList,
@@ -106,3 +189,4 @@ const styles = StyleSheet.create({
 });
 
 export default yourEventsScreen;
+*/
