@@ -29,7 +29,7 @@ const createEventScreen = ({navigation,route}) => {
     useEffect(() => {
         if(isEditEvent){
             const event = route.params.event[1];
-            setNewCar(event)
+            setNewEvent(event)
         }
         /*Fjern data, når vi går væk fra screenen*/
         return () => {
@@ -38,7 +38,7 @@ const createEventScreen = ({navigation,route}) => {
     }, []);
 
     const changeTextInput = (name,event) => {
-        setNewCar({...newCar, [name]: event});
+        setNewEvent({...newEvent, [name]: event});
     }
 
     const handleSave = () => {

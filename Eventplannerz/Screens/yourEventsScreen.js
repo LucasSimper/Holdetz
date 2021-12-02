@@ -41,7 +41,7 @@ const yourEventsScreen = ({navigation}) => {
         navigation.navigate('Event Details', { event });
     };
 
-    // Flatlist forventer et array. Derfor tager vi alle values fra vores cars objekt, og bruger som array til listen
+    // Flatlist forventer et array. Derfor tager vi alle values fra vores events objekt, og bruger som array til listen
     const eventArray = Object.values(events);
     const eventKeys = Object.keys(events);
 
