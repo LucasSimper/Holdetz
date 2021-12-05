@@ -1,8 +1,20 @@
 
 import * as React from 'react';
 import { View, Text, Platform, FlatList, StyleSheet, Button, Alert } from 'react-native';
-import firebase from 'firebase';
 import {useEffect, useState} from "react";
+import {
+  getDatabase,
+  ref,
+  query,
+  child,
+  get,
+  orderByChild,
+  equalTo,
+  onValue,
+} from "firebase/database";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
 
 const singleEventScreen = ({route,navigation}) => {
     const [event,setEvent] = useState({});
