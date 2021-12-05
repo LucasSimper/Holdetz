@@ -1,7 +1,6 @@
 
 import * as React from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
-import firebase from 'firebase';
 import {useEffect, useState} from "react";
 import {
   getDatabase,
@@ -17,18 +16,26 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const yourEventsScreen = ({navigation}) => {
 
-    const [events,setEvents] = useState()
+  const auth = getAuth();
+  const user = auth.currentUser;
+  const [events, setEvents] = useState({});
+  const db = getDatabase();
 
-    useEffect(() => {
-        if(!events) {
-            firebase
-                .database()
-                .ref('/events/')
-                .on('value', snapshot => {
-                        setEvents(snapshot.val())
-                });
-        }
-    },[]);
+  useEffect(() => {
+    const yourEventQuery = query(
+      ref(db, "events"),
+      orderByChild("UserID"),
+      equalTo(user.uid)
+    );
+    onValue(yourEventQuery, (snapshot) => {
+      if (snapshot.exists) {
+        //console.log(snapshot.val());
+        setEvents(snapshot.val());
+      } else {
+        console.log("No data Available");
+      }
+    });
+  }, []);
 
     // Vi viser ingenting hvis der ikke er data
     if (!events) {
@@ -38,7 +45,7 @@ const yourEventsScreen = ({navigation}) => {
    const handleSelectEvent = id => {
         /*Her søger vi direkte i vores array af events og finder event objektet som matcher idet vi har tilsendt*/
         const event = Object.entries(events).find( event => event[0] === id /*id*/)
-        navigation.navigate('Event Details', { event });
+        navigation.navigate('Single Event Page', { event });
     };
 
     // Flatlist forventer et array. Derfor tager vi alle values fra vores events objekt, og bruger som array til listen
@@ -48,11 +55,11 @@ const yourEventsScreen = ({navigation}) => {
     return (
         <FlatList
             data={eventArray}
-            // Vi bruger carKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
+            // Vi bruger eventKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
             keyExtractor={(item, index) => eventKeys[index]}
             renderItem={({ item, index }) => {
                 return(
-                    <TouchableOpacity style={styles.container} onPress={() => handleSelectCar(eventKeys[index])}>
+                    <TouchableOpacity style={styles.container} onPress={() => handleSelectEvent(eventKeys[index])}>
                         <Text>
                             {item.name} {item.place}
                         </Text>

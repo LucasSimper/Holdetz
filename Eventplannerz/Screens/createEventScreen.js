@@ -1,16 +1,17 @@
-import * as React from 'react';
+import React, {useEffect, useState } from "react";
 import {
-    View,
-    Text,
-    StyleSheet,
-    TextInput,
-    Button,
-    Alert,
-    ScrollView,
-    SafeAreaView,
-} from 'react-native';
-import firebase from 'firebase';
-import {useEffect, useState} from "react";
+  Button,
+  Text,
+  View,
+  TextInput,
+  StyleSheet,
+  Alert,
+  ScrollView,
+  SafeAreaView
+} from "react-native";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+import { getDatabase, ref, push, set } from "firebase/database";
 
 const createEventScreen = ({navigation,route}) => {
 
