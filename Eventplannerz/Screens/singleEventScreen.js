@@ -11,6 +11,7 @@ import {
   orderByChild,
   equalTo,
   onValue,
+  remove,
 } from "firebase/database";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
@@ -38,26 +39,28 @@ const singleEventScreen = ({route,navigation}) => {
     // Vi spørger brugeren om han er sikker
     const confirmDelete = () => {
         /*Er det mobile?*/
-        if(Platform.OS ==='ios' || Platform.OS ==='android'){
+        console.log("penis");
             Alert.alert('Are you sure?', 'Do you want to delete the event?', [
                 { text: 'Cancel', style: 'cancel' },
                 // Vi bruger this.handleDelete som eventHandler til onPress
                 { text: 'Delete', style: 'destructive', onPress: () => handleDelete() },
             ]);
-        }
-    };
+        };
 
     // Vi sletter det aktuelle event
     const  handleDelete = () => {
         const id = route.params.event[0];
         try {
-            firebase
-                .database()
-                // Vi sætter bilens ID ind i stien
-                .ref(`/events/${id}`)
-                // Og fjerner data fra den sti
-                .remove();
-            // Og går tilbage når det er udført
+            const db = getDatabase();
+            console.log(id);
+            const userRef = ref(db, "events/");
+            console.log("penis");
+            userRef.remove().then(function() {
+                console.log("Remove succeeded.")
+             })
+             .catch(function(error) {
+                console.log("Remove failed: " + error.message)
+             });
             navigation.goBack();
         } catch (error) {
             Alert.alert(error.message);
@@ -72,8 +75,8 @@ const singleEventScreen = ({route,navigation}) => {
     //all content
     return (
         <View style={styles.container}>
-            <Button title="Edit" onPress={ () => handleEdit()} />
-            <Button title="Delete" onPress={() => confirmDelete()} />
+            <Button title="Edit" onPress={() => handleEdit()} />
+            <Button title="Delete" onPress={() => handleDelete()} />
             {
                 Object.entries(event).map((item,index)=>{
                     return(

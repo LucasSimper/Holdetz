@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import {View, Button, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Button, Text, FlatList, TouchableOpacity, StyleSheet, StatusBar, Image} from 'react-native';
 import {useEffect, useState} from "react";
 import {
   getDatabase,
@@ -63,20 +63,30 @@ const yourEventsScreen = ({navigation}) => {
     const eventArray = Object.values(events);
     const eventKeys = Object.keys(events);
 
+    const Item = ({ title, picture, date, time, index }) => (
+      <View style={styles.item}>
+        <TouchableOpacity style={styles.container} onPress={() => handleSelectEvent(eventKeys[index])}>
+        <Image
+          style={{ width: 320, height: 120, alignSelf: "center" }}
+          source={{ uri: picture }}
+        />
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.dateTime}>Date: {date}  Time: {time}</Text>
+        </TouchableOpacity>
+      </View>
+    );
+
+
+    const renderItem = ({ item, index }) => (
+      <Item title={item.Name} picture={item.ImageURL} date={item.Date} time={item.Time} index={index}/>
+    );
+
     return (
         <FlatList
             data={eventArray}
             // Vi bruger eventKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
-            keyExtractor={(item, Location) => eventKeys[index]}
-            renderItem={({ item, index }) => {
-                return(
-                    <TouchableOpacity style={styles.container} onPress={() => handleSelectEvent(eventKeys[index])}>
-                        <Text>
-                            {item.Name} {item.Location}
-                        </Text>
-                    </TouchableOpacity>
-                )
-            }}
+            keyExtractor={(item, index) => eventKeys[index]}
+            renderItem={renderItem}
         />
     );
 }
@@ -85,16 +95,22 @@ export default yourEventsScreen;
 
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        borderWidth: 1,
-        borderRadius:10,
-        margin: 5,
-        padding: 5,
-        height: 50,
-        justifyContent:'center'
-    },
-    label: { fontWeight: 'bold' },
+  container: {
+    flex: 1,
+    marginTop: StatusBar.currentHeight || 0,
+  },
+  item: {
+    marginVertical: 8,
+    marginHorizontal: 16,
+  },
+  title: {
+    fontSize: 20,
+    alignSelf: "center",
+  },
+  dateTime: {
+    fontSize: 15,
+    alignSelf: "center"
+  }
 });
 
 
