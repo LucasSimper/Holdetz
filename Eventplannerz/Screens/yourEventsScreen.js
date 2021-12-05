@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {View, Button, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import {useEffect, useState} from "react";
 import {
   getDatabase,
@@ -15,6 +15,17 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const yourEventsScreen = ({navigation}) => {
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Button
+          onPress={() => navigation.navigate("Create Event")}
+          title="Create Event"
+        />
+      ),
+    });
+  }, [navigation]);
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -56,12 +67,12 @@ const yourEventsScreen = ({navigation}) => {
         <FlatList
             data={eventArray}
             // Vi bruger eventKeys til at finde ID på den aktuelle bil og returnerer dette som key, og giver det med som ID til CarListItem
-            keyExtractor={(item, index) => eventKeys[index]}
+            keyExtractor={(item, Location) => eventKeys[index]}
             renderItem={({ item, index }) => {
                 return(
                     <TouchableOpacity style={styles.container} onPress={() => handleSelectEvent(eventKeys[index])}>
                         <Text>
-                            {item.name} {item.place}
+                            {item.Name} {item.Location}
                         </Text>
                     </TouchableOpacity>
                 )
