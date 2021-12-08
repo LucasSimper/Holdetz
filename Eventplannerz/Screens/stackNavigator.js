@@ -6,6 +6,7 @@ import { View, Text, Button, Image } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import singleEventScreen from "./singleEventScreen";
 import editEventScreen from "./editEventScreen";
+import singleEventScreenHome from "./singeEventScreenHome";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,15 @@ function StackNavigator() {
     <Stack.Screen
         name="Edit Event"
         component={editEventScreen}
+        options={({ navigation, route }) => ({
+          headerTitleStyle: { textAlign: "right", color: "white" },
+          headerStyle: { backgroundColor: "#62bab5" }
+
+        })}
+      />
+      <Stack.Screen
+        name="Single Event Page (Home)"
+        component={singleEventScreenHome}
         options={({ navigation, route }) => ({
           headerTitleStyle: { textAlign: "right", color: "white" },
           headerStyle: { backgroundColor: "#62bab5" }

@@ -50,12 +50,9 @@ const singleEventScreen = ({route,navigation}) => {
     // Vi sletter det aktuelle event
     const  handleDelete = () => {
         const id = route.params.event[0];
-        try {
+            try {
             const db = getDatabase();
-            console.log(id);
-            const userRef = ref(db, "events/");
-            console.log("penis");
-            userRef.remove().then(function() {
+            remove(ref(db,`events/${id}`)).then(function() {
                 console.log("Remove succeeded.")
              })
              .catch(function(error) {
@@ -65,7 +62,7 @@ const singleEventScreen = ({route,navigation}) => {
         } catch (error) {
             Alert.alert(error.message);
         }
-    };
+    }
 
 
     if (!event) {

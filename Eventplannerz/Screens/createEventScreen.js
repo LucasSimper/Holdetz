@@ -47,7 +47,9 @@ function createEvent({ navigation }) {
         Date: date,
         Location: location,
         UserID: user.uid,
-        Private: isPrivate
+        Private: isPrivate,
+        Invited: [],
+        Going: [user.uid]
       });
       navigation.navigate("Your Events")
     } catch (error) {
