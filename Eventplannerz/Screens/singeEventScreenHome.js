@@ -56,6 +56,7 @@ const singleEventScreenHome = ({ route, navigation }) => {
 
   const setGoingFunc = () => {
     const preArray = [];
+    const userArray = [];
     get(child(dbRef, `events/${route.params.id}/Going`))
       .then((snapshot) => {
         console.log(snapshot.val());
@@ -69,11 +70,27 @@ const singleEventScreenHome = ({ route, navigation }) => {
           Going: preArray,
         });
         navigation.goBack();
-      });
+      })
+      .then(() => {
+        get(child(dbRef, `users/${route.params.id}/Going`))
+        .then((snapshot) => {
+          console.log(snapshot.val());
+          userArray.push.apply(userArray, snapshot.val());
+          console.log(userArray);
+          console.log(user.uid);
+        })
+        .then(() => {
+          userArray.push(route.params.id);
+          update(ref(db, `users/${user.uid}`), {
+            Going: userArray,
+          });     
+        });
+      })
   };
 
   const setNotGoingFunc = () => {
     const preArray = [];
+    const userArray = [];
     get(child(dbRef, `events/${route.params.id}/Going`))
       .then((snapshot) => {
         console.log(snapshot.val());
@@ -86,7 +103,21 @@ const singleEventScreenHome = ({ route, navigation }) => {
           Going: preArray,
         });
         navigation.goBack();
-      });
+      })
+      .then(() => {
+        get(child(dbRef, `users/${user.uid}/Going`))
+        .then((snapshot) => {
+          console.log(snapshot.val());
+          userArray.push.apply(userArray, snapshot.val());
+        })
+        .then(() => {
+          const index = userArray.indexOf(route.params.id);
+          userArray.splice(index, 1);
+          update(ref(db, `users/${user.uid}`), {
+            Going: userArray,
+          });
+        })
+      })
   };
 
   const renderButton = () => {

@@ -6,6 +6,7 @@ import {Button,Text,
     StyleSheet,
 } from 'react-native';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getDatabase, set, ref } from '@firebase/database';
 
 
 function signUpForm() {
@@ -25,6 +26,13 @@ function signUpForm() {
            await createUserWithEmailAndPassword(auth, email, password).then((userCredential) => {
             // Signed in 
             const user = userCredential.user;
+            console.log(user.uid);
+            const db = getDatabase();
+            console.log(db);
+            set(ref(db, "users/" + user.uid), {
+                Invited: [],
+                Going: []
+            });
             // ...
           })
         } catch (error){

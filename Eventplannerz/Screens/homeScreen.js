@@ -39,6 +39,7 @@ function homeScreen({ navigation }) {
   const user = auth.currentUser;
   const [events, setEvents] = useState({});
   const db = getDatabase();
+  console.log(db);
 
   useEffect(() => {
     const yourEventQuery = query(
